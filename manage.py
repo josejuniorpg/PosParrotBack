@@ -2,6 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+
 import environ
 
 from PosBack.settings.base import BASE_DIR
