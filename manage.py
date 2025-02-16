@@ -2,11 +2,19 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+import environ
+
+from PosBack.settings.base import BASE_DIR
+
+# Initialize the environment variables
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'PosBack.settings.local')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                            env.str('DJANGO_ENVIRONMENT_FILE', default='PosBack.settings.prod'))
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
