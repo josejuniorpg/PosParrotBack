@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, pagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .models import Restaurant, Employee
@@ -14,6 +14,11 @@ class IsAdminOrOwnerPermission(IsAuthenticated):
         print("EmployeeViewSet", Restaurant.objects.filter(user=request.user).exists())
         return request.user.is_superuser or Restaurant.objects.filter(user=request.user).exists()
 
+class EmployeePagination(pagination.PageNumberPagination):
+    """ Custom pagination class for Employees. """
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 50
 
 
 class RestaurantViewSet(viewsets.ModelViewSet):
@@ -45,6 +50,8 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     """
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+    pagination_class = EmployeePagination
+
 
     def get_queryset(self):
         """Only return the employees that the user owns."""
