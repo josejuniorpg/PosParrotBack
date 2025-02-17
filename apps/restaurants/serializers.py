@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Employee, Restaurant
+from .models import Employee, Restaurant, Table
 
 
 class RestaurantSerializer(serializers.ModelSerializer):
@@ -20,3 +20,13 @@ class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = ['id', 'restaurant', 'email', 'role', 'profile_picture', 'created', 'modified']
+
+
+class TableSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Table model.
+    """
+
+    class Meta:
+        model = Table
+        fields = ['id', 'table_number', 'capacity', 'status', 'created', 'modified']

@@ -60,9 +60,16 @@ class Table(TimeStampedModel):
         (0, 'Available'),
         (1, 'Busy'),
     ]
-    table_number = models.PositiveIntegerField(unique=True, verbose_name="Table Number")
+
+    restaurant = models.ForeignKey(
+        'restaurants.Restaurant',
+        on_delete=models.CASCADE,
+        related_name="tables",
+        verbose_name="Restaurant"
+    )
+    table_number = models.PositiveIntegerField(verbose_name="Table Number")
     capacity = models.PositiveIntegerField(verbose_name="Capacity")
-    status = models.BooleanField(choices=STATUS_CHOICES, default=0)
+    status = models.SmallIntegerField(choices=STATUS_CHOICES, default=0)
 
     def __str__(self):
-        return f"Table {self.table_number} - {self.get_status_display()}"
+        return f"Table {self.table_number} - {self.get_status_display()} ({self.restaurant.name})"

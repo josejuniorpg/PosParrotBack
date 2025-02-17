@@ -1,8 +1,9 @@
 from rest_framework import pagination, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from .models import Employee, Restaurant
-from .serializers import EmployeeSerializer, RestaurantSerializer
+from .models import Employee, Restaurant, Table
+from .serializers import (EmployeeSerializer, RestaurantSerializer,
+                          TableSerializer)
 
 
 class IsAdminOrOwnerPermission(IsAuthenticated):
@@ -11,7 +12,6 @@ class IsAdminOrOwnerPermission(IsAuthenticated):
     """
 
     def has_permission(self, request, view):
-        print("EmployeeViewSet", Restaurant.objects.filter(user=request.user).exists())
         return request.user.is_superuser or Restaurant.objects.filter(user=request.user).exists()
 
 class EmployeePagination(pagination.PageNumberPagination):
@@ -58,6 +58,27 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser:
             return Employee.objects.all()
         return Employee.objects.filter(restaurant__user=self.request.user)
+
+    def get_permissions(self):
+        """Only allow access to list for admins or restaurant owners."""
+        if self.action == 'list':
+            return [IsAdminOrOwnerPermission()]
+        return [IsAuthenticated()]
+
+
+class TableViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for managing restaurant tables.
+    """
+    serializer_class = TableSerializer
+    queryset = Table.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """Only return the tables that the user owns."""
+        if self.request.user.is_superuser:
+            return Table.objects.all()
+        return Table.objects.filter(restaurant__user=self.request.user)
 
     def get_permissions(self):
         """Only allow access to list for admins or restaurant owners."""
