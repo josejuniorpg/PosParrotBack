@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 
+
 class User(AbstractUser, TimeStampedModel):
     """Default user for Pos System, this is the owner of the restaurants."""
     email = models.EmailField(_("email address"), unique=True)

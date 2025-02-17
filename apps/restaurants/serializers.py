@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import Restaurant, Employee
+
+from .models import Employee, Restaurant
+
 
 class RestaurantSerializer(serializers.ModelSerializer):
     """

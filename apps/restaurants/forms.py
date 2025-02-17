@@ -1,5 +1,7 @@
 from django import forms
-from .models import Restaurant, Employee
+
+from .models import Employee, Restaurant
+
 
 class RestaurantForm(forms.ModelForm):
     """

@@ -1,7 +1,7 @@
-from django.db import models
-from django.contrib.auth.models import User
-from model_utils.models import TimeStampedModel
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.db import models
+from model_utils.models import TimeStampedModel
 
 
 class Restaurant(TimeStampedModel):
@@ -42,11 +42,27 @@ class Employee(TimeStampedModel):
         ('Chef', 'Chef'),
     ]
 
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="employees", verbose_name="Restaurant Name")
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="employees",
+                                   verbose_name="Restaurant Name")
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
     profile_picture = models.ImageField(upload_to='restaurants/employees/', null=True, blank=True)
 
-
     def __str__(self):
         return f"{self.role} - {self.email}"
+
+
+class Table(TimeStampedModel):
+    """
+    Represents a restaurant table.
+    """
+    STATUS_CHOICES = [
+        (0, 'Available'),
+        (1, 'Busy'),
+    ]
+    table_number = models.PositiveIntegerField(unique=True, verbose_name="Table Number")
+    capacity = models.PositiveIntegerField(verbose_name="Capacity")
+    status = models.BooleanField(choices=STATUS_CHOICES, default=0)
+
+    def __str__(self):
+        return f"Table {self.table_number} - {self.get_status_display()}"

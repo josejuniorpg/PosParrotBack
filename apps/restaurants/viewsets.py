@@ -1,8 +1,8 @@
-from rest_framework import viewsets, pagination
+from rest_framework import pagination, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from .models import Restaurant, Employee
-from .serializers import RestaurantSerializer, EmployeeSerializer
+from .models import Employee, Restaurant
+from .serializers import EmployeeSerializer, RestaurantSerializer
 
 
 class IsAdminOrOwnerPermission(IsAuthenticated):
