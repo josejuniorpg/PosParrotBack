@@ -27,7 +27,7 @@ class Order(TimeStampedModel):
 
     restaurant = models.ForeignKey('restaurants.Restaurant', on_delete=models.CASCADE, related_name="orders", verbose_name="Restaurant")
     customer = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.SET_NULL, related_name="orders", verbose_name="Customer")
-    table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name="orders", verbose_name="Table")
+    tables = models.ManyToManyField(Table, related_name="orders", verbose_name="Tables")
     employee = models.ForeignKey('restaurants.Employee', on_delete=models.CASCADE, related_name="orders", verbose_name="Employee")
     customer_name = models.CharField(max_length=255, blank=True, verbose_name="Customer Name (if anonymous)")
     status = models.SmallIntegerField(choices=STATUS_CHOICES, default=0)
@@ -39,4 +39,4 @@ class Order(TimeStampedModel):
     payment_method = models.SmallIntegerField(choices=PAYMENT_METHOD_CHOICES, null=True, blank=True)
 
     def __str__(self):
-        return f"Order {self.id} - Table {self.table.table_number} - {self.get_status_display()}"
+        return f"Order {self.id} - Tables {[table.table_number for table in self.tables.all()]} - {self.get_status_display()}"
