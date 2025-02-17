@@ -4,7 +4,7 @@ DEBUG = True
 
 INSTALLED_APPS += [
     # Third-party apps
-    # 'django_extensions',
+    'django_extensions',
 ]
 
 CORS_ALLOWED_ORIGINS = [
