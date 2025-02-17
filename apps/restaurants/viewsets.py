@@ -14,6 +14,7 @@ class IsAdminOrOwnerPermission(IsAuthenticated):
     def has_permission(self, request, view):
         return request.user.is_superuser or Restaurant.objects.filter(user=request.user).exists()
 
+
 class EmployeePagination(pagination.PageNumberPagination):
     """ Custom pagination class for Employees. """
     page_size = 5
@@ -42,7 +43,6 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated()]
 
 
-
 class EmployeeViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing Employees.
@@ -51,7 +51,6 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
     pagination_class = EmployeePagination
-
 
     def get_queryset(self):
         """Only return the employees that the user owns."""
