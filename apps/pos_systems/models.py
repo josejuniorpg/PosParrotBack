@@ -47,7 +47,7 @@ class Order(TimeStampedModel):
 
 class Category(TimeStampedModel):
     """
-    Represents a product category.
+    Represents a product category. The categories are shared among All User.
     """
     name = models.CharField(max_length=255, unique=True, verbose_name="Category Name")
     status = models.BooleanField(default=True, verbose_name="Status")
@@ -60,6 +60,8 @@ class Product(TimeStampedModel):
     """
     Represents a product in the restaurant.
     """
+    restaurants = models.ManyToManyField('restaurants.Restaurant', related_name="products",
+                                            verbose_name="Restaurants")
     name = models.CharField(max_length=255, verbose_name="Product Name")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Price")
     image = models.URLField(blank=True, null=True, verbose_name="Image URL")  # ✅ Almacena un link
@@ -75,7 +77,7 @@ class OrderProduct(models.Model):
     Represents the products in an order, tracking quantity.
     """
     order = models.ForeignKey('pos_systems.Order', on_delete=models.CASCADE, related_name="order_products",
-                                verbose_name="Order")
+                              verbose_name="Order")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="order_products",
                                 verbose_name="Product")
     quantity = models.PositiveIntegerField(default=1, verbose_name="Quantity")
