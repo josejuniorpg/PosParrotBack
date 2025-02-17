@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/token/verify/', PublicTokenVerifyView.as_view(), name='token_verify'),
 
     path('api/', include('apps.restaurants.urls')),
+    path('api/', include('apps.customers.urls')),
 
     # 🔹 Swagger UI
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
