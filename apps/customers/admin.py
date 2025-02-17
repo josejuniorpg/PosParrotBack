@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import Customer
 
 
@@ -7,6 +8,7 @@ class CustomerAdmin(admin.ModelAdmin):
     """
     Admin panel configuration for Customers.
     """
-    list_display = ('name', 'email', 'created',)
-    search_fields = ('name', 'email',)
-    ordering = ('created', 'name', 'email',)
+    list_display = ('name', 'email', 'restaurant', 'created')
+    list_filter = ('restaurant',)
+    search_fields = ('name', 'email', 'restaurant__name')
+    ordering = ('created',)
