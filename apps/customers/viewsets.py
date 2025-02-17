@@ -1,8 +1,8 @@
-from rest_framework import viewsets, pagination
+from rest_framework import pagination, viewsets
 from rest_framework.permissions import IsAuthenticated
+from ..restaurants.models import Restaurant
 from .models import Customer
 from .serializers import CustomerSerializer
-from ..restaurants.models import Restaurant
 
 
 class CustomerPagination(pagination.PageNumberPagination):
