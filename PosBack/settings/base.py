@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     # Local apps
     'apps.users',
     'apps.restaurants',
-    'apps.customers'
+    'apps.customers',
+    'apps.pos_systems',
 ]
 
 MIDDLEWARE = [
