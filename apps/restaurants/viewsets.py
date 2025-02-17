@@ -1,14 +1,42 @@
 from rest_framework import viewsets
+from rest_framework.permissions import AllowAny, IsAuthenticated
+
 from .models import Restaurant, Employee
 from .serializers import RestaurantSerializer, EmployeeSerializer
+
+
+class IsAdminOrOwnerPermission(IsAuthenticated):
+    """
+    Custom permission to allow only admins or restaurant owners to access the list.
+    """
+
+    def has_permission(self, request, view):
+        print("EmployeeViewSet", Restaurant.objects.filter(user=request.user).exists())
+        return request.user.is_superuser or Restaurant.objects.filter(user=request.user).exists()
+
+
 
 class RestaurantViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing Restaurants.
     Supports CRUD operations (list, create, retrieve, update, delete).
     """
-    queryset = Restaurant.objects.all()
+    queryset = Restaurant.objects.filter()
     serializer_class = RestaurantSerializer
+
+    def get_queryset(self):
+        """Only return the restaurants that the user owns."""
+        if self.request.user.is_superuser:
+            return Restaurant.objects.all()
+        return Restaurant.objects.filter(user=self.request.user)
+
+    def get_permissions(self):
+        """Only allow access to list for admins or restaurant owners."""
+        if self.action == 'list':
+            return [IsAdminOrOwnerPermission()]
+        return [IsAuthenticated()]
+
+
 
 class EmployeeViewSet(viewsets.ModelViewSet):
     """
@@ -17,3 +45,15 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     """
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+
+    def get_queryset(self):
+        """Only return the employees that the user owns."""
+        if self.request.user.is_superuser:
+            return Employee.objects.all()
+        return Employee.objects.filter(restaurant__user=self.request.user)
+
+    def get_permissions(self):
+        """Only allow access to list for admins or restaurant owners."""
+        if self.action == 'list':
+            return [IsAdminOrOwnerPermission()]
+        return [IsAuthenticated()]
