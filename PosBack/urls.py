@@ -22,20 +22,24 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # Authentication
     path('api/token/', PublicTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', PublicTokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', PublicTokenVerifyView.as_view(), name='token_verify'),
 
+    # Local Apps
     path('api/', include('apps.restaurants.urls')),
     path('api/', include('apps.customers.urls')),
+    path('api/', include('apps.pos_systems.urls')),
 
-    # 🔹 Swagger UI
+    # Documentation
+
+    # Swagger UI
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-
-    # 🔹 Redoc UI
+    # Redoc UI
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-
-    # 🔹 JSON OpenAPI Schema
+    # JSON OpenAPI Schema
     path('swagger.json', schema_view.without_ui(cache_timeout=0), name='schema-json'),
 
 ]
