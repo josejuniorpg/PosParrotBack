@@ -41,11 +41,31 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id','restaurants' ,'name', 'price', 'image', 'status', 'categories', 'created', 'modified']
 
 
+from rest_framework import serializers
+from .models import OrderProduct
+from apps.pos_systems.models import Product
+
 class OrderProductSerializer(serializers.ModelSerializer):
     """
-    Serializer for OrderProduct model.
+    Serializer for OrderProduct model with validation.
     """
-
     class Meta:
         model = OrderProduct
         fields = ['id', 'order', 'product', 'quantity']
+
+    @staticmethod
+    def validate_quantity(value):
+        """Ensure quantity is greater than zero."""
+        if value <= 0:
+            raise serializers.ValidationError("Quantity must be greater than zero.")
+        return value
+
+    def validate(self, data):
+        """Ensure product belongs to the restaurant of the order."""
+        order = data.get('order')
+        product = data.get('product')
+
+        if product not in order.restaurant.products.all():
+            raise serializers.ValidationError("The selected product does not belong to the restaurant of this order.")
+
+        return data

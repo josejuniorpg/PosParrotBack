@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from model_utils.models import TimeStampedModel
 
@@ -61,7 +62,7 @@ class Product(TimeStampedModel):
     Represents a product in the restaurant.
     """
     restaurants = models.ManyToManyField('restaurants.Restaurant', related_name="products",
-                                            verbose_name="Restaurants")
+                                         verbose_name="Restaurants")
     name = models.CharField(max_length=255, verbose_name="Product Name")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Price")
     image = models.URLField(blank=True, null=True, verbose_name="Image URL")  # ✅ Almacena un link
@@ -84,6 +85,10 @@ class OrderProduct(models.Model):
 
     class Meta:
         unique_together = ('order', 'product')
+
+    def clean(self):
+        if self.quantity <= 0:
+            raise ValidationError({"quantity": "Quantity must be greater than 0."})
 
     def __str__(self):
         return f"Order {self.order.id} - {self.product.name} x{self.quantity}"

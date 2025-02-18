@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+from .forms import OrderProductForm
 from .models import Order, Category, Product, OrderProduct
 
 
@@ -30,6 +32,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_filter = ('status', 'categories__name')
 
+
     def get_categories(self, obj):
         """Return categories as a comma-separated string."""
         return ", ".join([category.name for category in obj.categories.all()])
@@ -39,5 +42,21 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(OrderProduct)
 class OrderProductAdmin(admin.ModelAdmin):
-    list_display = ('order', 'product', 'quantity')
+    """
+    Admin panel configuration for OrderProduct.
+    Filters products based on the selected order.
+    """
+    form = OrderProductForm
+    list_display = ('order', 'product', 'quantity', 'get_restaurant')
     search_fields = ('order__id', 'product__name')
+    list_filter = ('order__restaurant', 'product__categories')
+    readonly_fields = ('order',)
+
+    def get_restaurant(self, obj):
+        """Show the restaurant of the order in the list display."""
+        return obj.order.restaurant.name
+    get_restaurant.short_description = "Restaurant"
+
+    def has_add_permission(self, request, obj=None):
+        """Disable the 'Add' button to prevent users from creating OrderProduct manually."""
+        return False
