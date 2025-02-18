@@ -34,8 +34,8 @@ class RestaurantAdmin(admin.ModelAdmin):
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ('email', 'role', 'restaurant', 'created', 'modified')
-    search_fields = ('email', 'restaurant__name')
+    list_display = ('name', 'email', 'role', 'restaurant', 'created', 'modified')
+    search_fields = ('name', 'email', 'restaurant__name')
     list_filter = ('role', RestaurantFilter)
 
 

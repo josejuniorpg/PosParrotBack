@@ -38,17 +38,14 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id','restaurants' ,'name', 'price', 'image', 'status', 'categories', 'created', 'modified']
+        fields = ['id', 'restaurants', 'name', 'price', 'image', 'status', 'categories', 'created', 'modified']
 
-
-from rest_framework import serializers
-from .models import OrderProduct
-from apps.pos_systems.models import Product
 
 class OrderProductSerializer(serializers.ModelSerializer):
     """
     Serializer for OrderProduct model with validation.
     """
+
     class Meta:
         model = OrderProduct
         fields = ['id', 'order', 'product', 'quantity']

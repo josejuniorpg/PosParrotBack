@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from model_utils.models import TimeStampedModel
 
@@ -44,12 +45,18 @@ class Employee(TimeStampedModel):
 
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="employees",
                                    verbose_name="Restaurant Name")
-    email = models.EmailField(unique=True)
+    name = models.CharField(max_length=255, verbose_name="Employee Name")
+    email = models.EmailField(verbose_name="Email")
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
     profile_picture = models.ImageField(upload_to='restaurants/employees/', null=True, blank=True)
 
+    def clean(self):
+        """Ensure email is unique within the same restaurant."""
+        if Employee.objects.filter(restaurant=self.restaurant, email=self.email).exclude(id=self.id).exists():
+            raise ValidationError({"email": "This email is already in use in this restaurant."})
+
     def __str__(self):
-        return f"{self.role} - {self.email}"
+        return f"{self.name} ({self.restaurant.name})"
 
 
 class Table(TimeStampedModel):
@@ -70,6 +77,12 @@ class Table(TimeStampedModel):
     table_number = models.PositiveIntegerField(verbose_name="Table Number")
     capacity = models.PositiveIntegerField(verbose_name="Capacity")
     status = models.SmallIntegerField(choices=STATUS_CHOICES, default=0)
+
+    def clean(self):
+        """Ensure table_number is unique within the same restaurant."""
+        if Table.objects.filter(restaurant=self.restaurant, table_number=self.table_number).exclude(
+                id=self.id).exists():
+            raise ValidationError({"table_number": "This table number already exists in this restaurant."})
 
     def __str__(self):
         return f"Table {self.table_number} - {self.get_status_display()} ({self.restaurant.name})"
