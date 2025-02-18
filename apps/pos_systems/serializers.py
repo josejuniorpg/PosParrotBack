@@ -61,7 +61,7 @@ class OrderProductSerializer(serializers.ModelSerializer):
         """Ensure product belongs to the restaurant of the order."""
         order = data.get('order')
         product = data.get('product')
-
+        # todo: Product Status.
         if product not in order.restaurant.products.all():
             raise serializers.ValidationError("The selected product does not belong to the restaurant of this order.")
 

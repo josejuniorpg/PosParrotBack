@@ -65,7 +65,7 @@ class Product(TimeStampedModel):
                                          verbose_name="Restaurants")
     name = models.CharField(max_length=255, verbose_name="Product Name")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Price")
-    image = models.URLField(blank=True, null=True, verbose_name="Image URL")  # ✅ Almacena un link
+    image = models.ImageField(blank=True, null=True, verbose_name="Product Image")
     status = models.SmallIntegerField(choices=[(0, 'Available'), (1, 'Out of Stock')], default=0)
     categories = models.ManyToManyField(Category, related_name="products", verbose_name="Categories")
 

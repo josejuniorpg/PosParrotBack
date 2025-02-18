@@ -21,6 +21,7 @@ class OrderProductForm(forms.ModelForm):
             print("No order")
             self.fields['product'].queryset = Product.objects.all()
             return
+        # todo: Product Status
         if self.instance.order:
             self.fields['product'].queryset = Product.objects.filter(restaurants=self.instance.order.restaurant)
         else:
