@@ -49,6 +49,11 @@ class CategoryViewSet(viewsets.ModelViewSet):
         """
         return Category.objects.all()
 
+    @staticmethod
+    def has_permission(request, view):
+        """Custom permission to allow only admins or restaurant owners to access the list."""
+        return request.user.is_superuser or Restaurant.objects.filter(user=request.user).exists()
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
@@ -79,6 +84,11 @@ class ProductViewSet(viewsets.ModelViewSet):
 
         serializer.save()
 
+    @staticmethod
+    def has_permission(request, view):
+        """Custom permission to allow only admins or restaurant owners to access the list."""
+        return request.user.is_superuser or Restaurant.objects.filter(user=request.user).exists()
+
 
 class OrderProductViewSet(viewsets.ModelViewSet):
     """
@@ -87,3 +97,8 @@ class OrderProductViewSet(viewsets.ModelViewSet):
     serializer_class = OrderProductSerializer
     queryset = OrderProduct.objects.all()
     permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def has_permission(request, view):
+        """Custom permission to allow only admins or restaurant owners to access the list."""
+        return request.user.is_superuser or Restaurant.objects.filter(user=request.user).exists()

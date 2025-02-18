@@ -1,5 +1,4 @@
 from rest_framework import pagination, viewsets
-from rest_framework.permissions import IsAuthenticated
 from ..restaurants.models import Restaurant
 from .models import Customer
 from .serializers import CustomerSerializer
@@ -14,13 +13,12 @@ class CustomerPagination(pagination.PageNumberPagination):
     max_page_size = 50
 
 
-class CustomerViewSet(viewsets.ModelViewSet, pagination.PageNumberPagination, IsAuthenticated):
+class CustomerViewSet(viewsets.ModelViewSet, pagination.PageNumberPagination):
     """
     API endpoint for managing customers.
     """
     serializer_class = CustomerSerializer
     queryset = Customer.objects.all()
-    permission_classes = [IsAuthenticated]
     pagination_class = CustomerPagination
 
     def get_queryset(self):
@@ -28,6 +26,7 @@ class CustomerViewSet(viewsets.ModelViewSet, pagination.PageNumberPagination, Is
             return Customer.objects.all()
         return Customer.objects.filter(restaurant__user=self.request.user)
 
-    def has_permission(self, request, view):
+    @staticmethod
+    def has_permission(request, view):
         """Custom permission to allow only admins or restaurant owners to access the list."""
         return request.user.is_superuser or Restaurant.objects.filter(user=request.user).exists()
