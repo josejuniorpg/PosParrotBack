@@ -10,26 +10,27 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Restaurant
-        fields = ['id', 'name', 'address', 'phone_number', 'created', 'modified']
+        fields = ['id', 'name', 'address', 'phone_number', ]
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
     """
     Serializer for Employee model with email validation.
     """
+
     class Meta:
         model = Employee
-        fields = ['id', 'name','restaurant', 'email', 'role', 'profile_picture', 'created', 'modified']
+        fields = ['id', 'name', 'email', 'role', 'profile_picture', ]
 
     def validate_email(self, value):
         """Ensure email is unique within the same restaurant."""
-        restaurant = self.initial_data.get('restaurant')  # ✅ Obtener el restaurante desde la solicitud
-        employee_id = self.instance.id if self.instance else None  # ✅ Obtener el ID si está editando
-
+        restaurant = self.initial_data.get('restaurant')
+        employee_id = self.instance.id if self.instance else None
         if Employee.objects.filter(restaurant=restaurant, email=value).exclude(id=employee_id).exists():
             raise serializers.ValidationError("This email is already in use in this restaurant.")
 
         return value
+
 
 class TableSerializer(serializers.ModelSerializer):
     """
@@ -38,7 +39,7 @@ class TableSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Table
-        fields = ['id', 'table_number', 'capacity', 'status', 'created', 'modified']
+        fields = ['id', 'table_number', 'capacity', 'status', ]
 
     def validate(self, data):
         """Ensure table_number is unique within the same restaurant."""
