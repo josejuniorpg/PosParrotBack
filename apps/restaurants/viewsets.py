@@ -8,15 +8,6 @@ from .serializers import (EmployeeSerializer, RestaurantSerializer,
                           TableSerializer)
 
 
-class IsAdminOrOwnerPermission(IsAuthenticated):
-    """
-    Custom permission to allow only admins or restaurant owners to access the list.
-    """
-
-    def has_permission(self, request, view):
-        return request.user.is_superuser or Restaurant.objects.filter(user=request.user).exists()
-
-
 class EmployeePagination(pagination.PageNumberPagination):
     """ Custom pagination class for Employees. """
     page_size = 5
@@ -31,18 +22,13 @@ class RestaurantViewSet(viewsets.ModelViewSet):
     """
     queryset = Restaurant.objects.filter()
     serializer_class = RestaurantSerializer
+    permission_classes = [IsAuthenticated, IsRestaurantOwner]
 
     def get_queryset(self):
         """Only return the restaurants that the user owns."""
         if self.request.user.is_superuser:
             return Restaurant.objects.all()
         return Restaurant.objects.filter(user=self.request.user)
-
-    def get_permissions(self):
-        """Only allow access to list for admins or restaurant owners."""
-        if self.action == 'list':
-            return [IsAdminOrOwnerPermission()]
-        return [IsAuthenticated()]
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
