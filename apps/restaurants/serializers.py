@@ -20,7 +20,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ['id', 'name', 'email', 'role', 'profile_picture', ]
+        fields = ['id', 'name', 'email', 'role', 'profile_picture', 'restaurant', ]
 
     def validate_email(self, value):
         """Ensure email is unique within the same restaurant."""
@@ -39,7 +39,7 @@ class TableSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Table
-        fields = ['id', 'table_number', 'capacity', 'status', ]
+        fields = ['id', 'table_number', 'capacity', 'status', 'restaurant', ]
 
     def validate(self, data):
         """Ensure table_number is unique within the same restaurant."""

@@ -56,18 +56,14 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """Ensure the employee is created only in the specified restaurant."""
-        restaurant_id = self.request.query_params.get("restaurant")
+        restaurant_id = self.request.data.get("restaurant")
 
         if not restaurant_id:
-            raise ValidationError("A restaurant ID is required in the query parameters.")
+            raise ValidationError("A restaurant ID is required.")
 
         restaurant = Restaurant.objects.filter(id=restaurant_id, user=self.request.user).first()
         if not restaurant:
             raise ValidationError("You do not have permission to add employees to this restaurant.")
-
-        # Avoid duplicate employee email within the same restaurant
-        if Employee.objects.filter(email=serializer.validated_data['email'], restaurant=restaurant).exists():
-            raise ValidationError("An employee with this email already exists in this restaurant.")
 
         serializer.save(restaurant=restaurant)
 
@@ -95,17 +91,13 @@ class TableViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """Ensure the table is created only in the specified restaurant."""
-        restaurant_id = self.request.query_params.get("restaurant")
+        restaurant_id = self.request.data.get("restaurant")
 
         if not restaurant_id:
-            raise ValidationError("A restaurant ID is required in the query parameters.")
+            raise ValidationError("A restaurant ID is required.")
 
         restaurant = Restaurant.objects.filter(id=restaurant_id, user=self.request.user).first()
         if not restaurant:
             raise PermissionDenied("You do not have permission to add tables to this restaurant.")
-
-        # Avoid duplicate table number within the same restaurant
-        if Table.objects.filter(table_number=serializer.validated_data['table_number'], restaurant=restaurant).exists():
-            raise ValidationError("A table with this number already exists in this restaurant.")
 
         serializer.save(restaurant=restaurant)

@@ -55,7 +55,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
         restaurant_id = self.request.data.get("restaurant")
 
         if not restaurant_id:
-            raise ValidationError("A restaurant ID is required in the query parameters.")
+            raise ValidationError("A restaurant ID is required")
 
         # Ensure the user owns the specified restaurant
         if not Restaurant.objects.filter(id=restaurant_id, user=self.request.user).exists():
