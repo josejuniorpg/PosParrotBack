@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from .models import Customer
 
@@ -17,7 +18,7 @@ class CustomerSerializer(serializers.ModelSerializer):
         """
         Ensure the email is unique per restaurant.
         """
-        restaurant_id = self.context['request'].query_params.get("restaurant")
+        restaurant_id = self.context['request'].data.get("restaurant")
         if restaurant_id and Customer.objects.filter(email=value, restaurant_id=restaurant_id).exists():
-            raise serializers.ValidationError("A customer with this email already exists in this restaurant.")
+            raise ValidationError("A customer with this email already exists in this restaurant.")
         return value

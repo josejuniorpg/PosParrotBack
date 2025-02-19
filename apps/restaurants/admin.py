@@ -7,7 +7,7 @@ class RestaurantFilter(admin.SimpleListFilter):
     """
     Custom filter to display restaurants by name in the Django admin.
     """
-    title = "Restaurant"  # ✅ Custom label shown in the filter section
+    title = "Restaurant"
     parameter_name = "restaurant"
 
     def lookups(self, request, model_admin):

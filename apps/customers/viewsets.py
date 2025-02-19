@@ -52,7 +52,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
         Assign the customer to a specific restaurant based on the request parameters,
         ensuring the user owns the restaurant and avoiding duplicate emails.
         """
-        restaurant_id = self.request.query_params.get("restaurant")
+        restaurant_id = self.request.data.get("restaurant")
 
         if not restaurant_id:
             raise ValidationError("A restaurant ID is required in the query parameters.")
