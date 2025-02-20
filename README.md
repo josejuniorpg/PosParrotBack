@@ -84,10 +84,25 @@ python manage.py test
 ```
 
 ## Carga de datos iniciales (Opcional)
-Si el proyecto cuenta con datos de prueba, puedes cargarlos con:
+Este link redirijira a un archivo de json que tendra datos para llenar la BD:
+```Link
+https://drive.google.com/file/d/1v8XTHAJ-kA0Xn-RHtuBQjFgak7UiCdtF/view?usp=sharing
+```
 ```bash
 python manage.py loaddata data.json
 ```
+### Datos
+Estos datos ya tienen creadoa varios Usuarios y restaurantes, junto con sus ordenes y productos. 
+### Users
+` Es un Usuario con varios restaurantes, ordenes
+username: pepe3
+constraseña; admin
+`
+` Es un super Usuarios
+username: admin
+constraseña; admin
+`
+
 ---
 
 Si tienes preguntas o problemas, no dudes en abrir un issue en el repositorio. ¡Gracias por contribuir!
