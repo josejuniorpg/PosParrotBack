@@ -65,7 +65,11 @@ Sigue las instrucciones en pantalla para establecer un usuario y contraseña.
 
 ## Ejecución del proyecto
 
-Para iniciar el servidor de desarrollo, ejecuta:
+Para el modo de pruebas, sera necesario esta key, para confugurar el archivo de desarollo correctamente. Ya que si no se introduce, se ejecutara el modo de produccion por defecto. 
+```
+DJANGO_ENVIRONMENT_FILE=PosBack.settings.local
+```
+Para iniciar el servidor, ejecuta:
 ```bash
 python manage.py runserver
 ```
@@ -92,7 +96,11 @@ https://drive.google.com/file/d/1v8XTHAJ-kA0Xn-RHtuBQjFgak7UiCdtF/view?usp=shari
 python manage.py loaddata data.json
 ```
 ### Datos
-Estos datos ya tienen creadoa varios Usuarios y restaurantes, junto con sus ordenes y productos. 
+Estos datos ya tienen creadoa varios Usuarios y restaurantes, junto con sus ordenes y productos.  
+Para que funcionen los usuarios posiblemente sera necesaria  poner esta secret key.
+```
+SECRET_KEY=dj1223ago-insasdecureasd--t454awc%j)n%dbl-5*^j@43y1^$scamb*5(ai6jx@$@q
+```
 ### Users
 ``` Es un Usuario con varios restaurantes, ordenes, productos, etc. 
 username: pepe3
