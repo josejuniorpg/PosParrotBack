@@ -94,14 +94,14 @@ python manage.py loaddata data.json
 ### Datos
 Estos datos ya tienen creadoa varios Usuarios y restaurantes, junto con sus ordenes y productos. 
 ### Users
-` Es un Usuario con varios restaurantes, ordenes
+``` Es un Usuario con varios restaurantes, ordenes, productos, etc. 
 username: pepe3
 constraseña; admin
-`
-` Es un super Usuarios
+```
+``` Es un super Usuario
 username: admin
 constraseña; admin
-`
+```
 
 ---
 
