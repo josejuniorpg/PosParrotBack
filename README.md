@@ -66,7 +66,7 @@ Sigue las instrucciones en pantalla para establecer un usuario y contraseña.
 ## Ejecución del proyecto
 
 Para el modo de pruebas, sera necesario esta key, para confugurar el archivo de desarollo correctamente. Ya que si no se introduce, se ejecutara el modo de produccion por defecto. 
-```
+```ini
 DJANGO_ENVIRONMENT_FILE=PosBack.settings.local
 ```
 Para iniciar el servidor, ejecuta:
@@ -89,7 +89,7 @@ python manage.py test
 
 ## Carga de datos iniciales (Opcional)
 Este link redirijira a un archivo de json que tendra datos para llenar la BD:
-```Link
+```link
 https://drive.google.com/file/d/1v8XTHAJ-kA0Xn-RHtuBQjFgak7UiCdtF/view?usp=sharing
 ```
 ```bash
