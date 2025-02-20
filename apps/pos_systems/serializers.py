@@ -30,15 +30,31 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     """
-    Serializer for Product model.
+    Serializer for Product model with image upload support.
     """
-    categories = serializers.PrimaryKeyRelatedField(many=True,
-                                                    queryset=Category.objects.all())
+    categories = serializers.PrimaryKeyRelatedField(many=True, queryset=Category.objects.all())
     restaurants = serializers.PrimaryKeyRelatedField(many=True, queryset=Restaurant.objects.all())
 
     class Meta:
         model = Product
-        fields = ['id', 'restaurants', 'name', 'price', 'image', 'status', 'categories', 'created', 'modified']
+        fields = ['id', 'restaurants', 'name', 'price', 'image', 'status', 'categories',]
+
+    def validate_name(self, value):
+        """
+        Ensure product name is unique within the assigned restaurants.
+        """
+        request = self.context.get('request')
+        if not request:
+            return value  # Skip validation if request is not available
+
+        restaurant_ids = request.data.get("restaurants", [])
+        if not restaurant_ids:
+            raise serializers.ValidationError("At least one restaurant must be assigned to the product.")
+
+        if Product.objects.filter(name=value, restaurants__id__in=restaurant_ids).exists():
+            raise serializers.ValidationError("A product with this name already exists in one of the selected restaurants.")
+
+        return value
 
 
 class OrderProductSerializer(serializers.ModelSerializer):
